@@ -63,29 +63,32 @@ function sendMqtt(id, data) {
 }
 
 const SolarLogPayloadParser_3500 = new Parser()
-	.array('lastUpdateTime', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}} ) //3500
-	.array('Pac', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}} ) //3502
-	.array('Pdc', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}} ) //3504
+	.array('lastUpdateTime', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}} ) //3500
+	.array('Pac', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}} ) //3502
+	.array('Pdc', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}} ) //3504
 	.uint16be('Uac') //3506
 	.uint16be('Udc') //3507
-	.array('DailyYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3508
-	.array('YesterdayYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3510
-	.array('MonthlyYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3512
-	.array('YearlyYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3514
-	.array('TotalYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3516
-	.array('PacConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3518
-	.array('DailyYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3520
-	.array('YesterdayYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3522
-	.array('MonthlyYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3524
-	.array('YearlyYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3526
-	.array('TotalYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3528
-	.array('TotalPower', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 || arr[0];}}) //3530
+	.array('DailyYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3508
+	.array('YesterdayYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3510
+	.array('MonthlyYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3512
+	.array('YearlyYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3514
+	.array('TotalYield', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3516
+	.array('PacConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3518
+	.array('DailyYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3520
+	.array('YesterdayYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3522
+	.array('MonthlyYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3524
+	.array('YearlyYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3526
+	.array('TotalYieldConsumption', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3528
+	.array('TotalPower', {type: "uint16be", length: 2, formatter: function(arr){return arr[1]<<16 | arr[0];}}) //3530
 	;
 
 const getSolarLogRegisters = async (address) => {
 	try {
 		modbusClient.setID(address);
 		let data = await modbusClient.readInputRegisters(3500, 32);
+		if(options.debug) {
+			console.log(util.inspect(data));
+		}
                 let vals = SolarLogPayloadParser_3500.parse(data.buffer);
                 
 		if(options.debug) {

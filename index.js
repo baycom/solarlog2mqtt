@@ -59,7 +59,7 @@ function sendMqtt(id, data) {
         if(options.debug) {
 	        console.log("publish: "+'Solarlog/' + id, JSON.stringify(data));
 	}
-        MQTTclient.publish('Solarlog/' + id, JSON.stringify(data));        
+        MQTTclient.publish('Solarlog/' + id, JSON.stringify(data), { retain: true });
 }
 
 const SolarLogPayloadParser_3500 = new Parser()
